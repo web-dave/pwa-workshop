@@ -30,16 +30,6 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
   log('[Service Worker]: Active');
-  event.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(keyList.map((key) => {
-        if (key !== cacheName) {
-          log('[Service Worker]: Removing old cache', key);
-          return caches.delete(key);
-        }
-      }));
-    })
-  );
 });
 
 self.addEventListener('fetch', (event) => {
