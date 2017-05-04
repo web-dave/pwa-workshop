@@ -50,6 +50,7 @@ self.addEventListener('fetch', (event) => {
   if (event.request.url.indexOf('timeline/') != -1) {
     event.respondWith(
 
+      // Network-First Strategy
       fetch(event.request)
         .then((response) => {
           return caches.open(dataCacheName).then((cache) => {
@@ -67,7 +68,21 @@ self.addEventListener('fetch', (event) => {
         })
 
     );
+  } else if (event.request.url.indexOf('fonts.googleapis.com') != -1 || event.request.url.indexOf('fonts.gstatic.com') != -1 || event.request.url.indexOf('pbs.twimg.com') != -1) {
+    event.respondWith(
 
+      // Cache-First Strategy
+      caches.match(event.request.clone()).then((response) => {
+        return response || fetch(event.request.clone()).then((r2) => {
+            return caches.open(dataCacheName).then((cache) => {
+              console.log('[Service Worker]: Fetched & Cached URL using cache-first', event.request.url);
+              cache.put(event.request.url, r2.clone());
+              return r2.clone();
+            });
+          });
+      })
+
+    );
   } else {
 
     // The old code for App Shell
@@ -78,3 +93,4 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+
