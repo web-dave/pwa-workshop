@@ -4,12 +4,13 @@ module.exports = {
     'build/**.bundle.js',
     'build/**.bundle.css',
     'build/assets/**',
-    'build/manifest.json'
+    'build/manifest.json',
+    'build/sw-registration.js'
   ],
   root: 'build',
   stripPrefix: 'build/',
   navigateFallback: '/index.html',
-  // sw-precache-config.js
+  importScripts: ['/sw.js'],
   runtimeCaching: [{
     urlPattern: /timeline/,
     handler: 'networkFirst'
