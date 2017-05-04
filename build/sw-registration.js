@@ -29,6 +29,7 @@ window.addEventListener('load', function () {
     pushSubscribe();
   });
   document.querySelector('.js-push-unsubscribe-button').addEventListener('click', function () {
+    pushUnsubscribe();
   });
 });
 
@@ -75,4 +76,30 @@ function pushSubscribe () {
   }
 }
 
+function pushUnsubscribe () {
+  navigator.serviceWorker.ready.then(function (swRegistration) {
+    swRegistration.pushManager.getSubscription().then(
+      function (pushSubscription) {
+        if (!pushSubscription) {
+          console.log('[SW Registration]: No push subscription found')
+          return
+        }
+
+        console.log('[SW Registration]: Sending subscription object to backend to unsubscribe', pushSubscription)
+        return fetch('http://localhost:3000/webpush', {
+          method: 'POST',
+          body: JSON.stringify({action: 'unsubscribe', subscription: pushSubscription}),
+          headers: new Headers({'Content-Type': 'application/json'})
+        })
+
+        pushSubscription.unsubscribe().then(function () {
+          console.log('[SW Registration]: Push unsubscription is successful')
+        }).catch(function (error) {
+          console.log('[SW Registration]: Unable to unsubscribe from push.', error)
+        })
+      }).catch(function (error) {
+      console.log('[SW Registration]: Unable to get push subscription', error)
+    })
+  })
+}
 
