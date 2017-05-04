@@ -22,3 +22,21 @@ self.addEventListener('activate', (event) => {
 
   event.waitUntil(self.clients.claim());
 });
+
+self.addEventListener('push', function (event) {
+  log('[Service Worker]: Received push event')
+
+  var notificationData = {}
+
+  if (event.data) {
+    notificationData = event.data.json().notification; // "notification node is specific for @angular/service-worker
+  } else {
+    notificationData = {
+      title: 'Something Has Happened',
+      message: 'Something you might want to check out',
+      icon: '/assets/images/logo.png'
+    }
+  }
+
+  self.registration.showNotification(notificationData.title, notificationData);
+})

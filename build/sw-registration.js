@@ -1,4 +1,4 @@
-const vapidPublicKey = 'BK0KyEStZnnd9vabEpVZYmYcDSMJ-GFDCQH0bMEyOiuScLgQihpkEbVkLjr-CGxLMRRRTXZ72J2ZQq8SpgjZ03Q';
+const vapidPublicKey = 'BEnRHqKlm_ZvaUDQkVhdfAKwEwdssJOxL-TKVtgKSyuQp9anqmcoID8cEsCrTlUFHheBmMIVgNaBs8vNG7idNdo';
 const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
 
 
