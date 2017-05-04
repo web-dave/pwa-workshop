@@ -9,7 +9,6 @@ module.exports = {
   root: 'build',
   stripPrefix: 'build/',
   navigateFallback: '/index.html',
-  // sw-precache-config.js
   runtimeCaching: [{
     urlPattern: /timeline/,
     handler: 'networkFirst'
