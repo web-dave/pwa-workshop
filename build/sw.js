@@ -44,18 +44,4 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   log('[Service Worker]: Fetch');
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      if (response) {
-        log('[Service Worker]: returning ' + event.request.url + 'from cache');
-        return response;
-      } else {
-        log('[Service Worker]: returning ' + event.request.url + 'from net');
-        return fetch(event.request);
-      }
-
-      // w/o debug info:
-      // return response || fetch(event.request);
-    })
-  );
 });
