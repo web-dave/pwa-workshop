@@ -48,9 +48,9 @@ self.addEventListener('fetch', (event) => {
 
   // Match requests for data and handle them separately
   if (event.request.url.indexOf('timeline/') != -1) {
-   event.respondWith(
+    event.respondWith(
 
-fetch(event.request)
+      fetch(event.request)
         .then((response) => {
           return caches.open(dataCacheName).then((cache) => {
 
@@ -59,7 +59,7 @@ fetch(event.request)
             return response.clone();
           });
         })
-       .catch((error) => {
+        .catch((error) => {
           log('[Service Worker]: Returning from cache', event.request.url);
           return caches.match(event.request).then((response) => {
             return response;
@@ -75,6 +75,6 @@ fetch(event.request)
       caches.match(event.request).then((response) => {
         return response || fetch(event.request);
       })
-    )
+    );
   }
-})
+});
