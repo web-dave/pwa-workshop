@@ -47,6 +47,8 @@ function urlBase64ToUint8Array (base64String) {
 function pushSubscribe () {
   if ('showNotification' in ServiceWorkerRegistration.prototype) {
     navigator.serviceWorker.ready.then(function (swRegistration) {
+      // it seemes to never reach here.
+      console.log('navigator.serviceWorker.ready', swRegistration)
       swRegistration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: convertedVapidKey
