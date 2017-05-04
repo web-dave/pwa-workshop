@@ -8,4 +8,21 @@ module.exports = {
   root: 'build',
   stripPrefix: 'build/',
   navigateFallback: '/index.html',
+  // sw-precache-config.js
+  runtimeCaching: [{
+    urlPattern: /timeline/,
+    handler: 'networkFirst'
+  },
+  {
+    urlPattern: /fonts\.googleapis\.com/,
+    handler: 'cacheFirst'
+  },
+  {
+    urlPattern: /fonts\.gstatic\.com/,
+    handler: 'cacheFirst'
+  },
+  {
+    urlPattern: /pbs\.twimg\.com/,
+    handler: 'cacheFirst'
+  }]
 };
