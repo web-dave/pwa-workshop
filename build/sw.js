@@ -6,11 +6,11 @@ var cacheName = 'pwa-freitagtraining-v' + version;
 var appShellFilesToCache = [
   './',
   './index.html',
-  './inline.9b502c297169a277d5fb.bundle.js',
-  './main.7076b51032c778e38a8b.bundle.js',
   './polyfills.a826c616902ba35dd8ef.bundle.js',
+  './main.d2cd6bc2954cdcb804a7.bundle.js',
   './styles.b0e114c891ad3843b53e.bundle.css',
-  './vendor.331882c5745789983b16.bundle.js',
+  './vendor.7d70e606e2354f599659.bundle.js',
+  './inline.d9955bd378f044a74e3e.bundle.js',
   './favicon.ico',
   './assets/images/logo.png'
 ];
