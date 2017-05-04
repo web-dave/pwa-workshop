@@ -1,0 +1,22 @@
+{
+    "dir": "ltr",
+    "lang": "en",
+    "name": "PWA Workshop",
+    "scope": "/",
+    "display": "standalone",
+    "start_url": "./?utm_source=web_app_manifest",
+    "short_name": "PWAWorkshop",
+    "theme_color": "#c34c91",
+    "description": "",
+    "orientation": "any",
+    "background_color": "#3a1c8d",
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "/assets/images/logo.png",
+            "sizes": "600x600",
+            "type": "image/png"
+        }
+    ]
+}
