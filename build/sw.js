@@ -3,6 +3,7 @@ var err = console.error.bind(console);
 
 var version = '2';
 var cacheName = 'pwa-freitagtraining-v' + version;
+var dataCacheName = 'pwa-freitagtraining-data-v' + version;
 var appShellFilesToCache = [
   './',
   './index.html',
@@ -44,18 +45,36 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   log('[Service Worker]: Fetch');
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      if (response) {
-        log('[Service Worker]: returning ' + event.request.url + 'from cache');
-        return response;
-      } else {
-        log('[Service Worker]: returning ' + event.request.url + 'from net');
-        return fetch(event.request);
-      }
 
-      // w/o debug info:
-      // return response || fetch(event.request);
-    })
-  );
-});
+  // Match requests for data and handle them separately
+  if (event.request.url.indexOf('timeline/') != -1) {
+   event.respondWith(
+
+fetch(event.request)
+        .then((response) => {
+          return caches.open(dataCacheName).then((cache) => {
+
+            cache.put(event.request.url, response.clone());
+            log('[Service Worker]: Fetched & Cached URL using network-first', event.request.url);
+            return response.clone();
+          });
+        })
+       .catch((error) => {
+          log('[Service Worker]: Returning from cache', event.request.url);
+          return caches.match(event.request).then((response) => {
+            return response;
+          });
+        })
+
+    );
+
+  } else {
+
+    // The old code for App Shell
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request);
+      })
+    )
+  }
+})
