@@ -10,7 +10,10 @@ module.exports = {
   root: 'build',
   stripPrefix: 'build/',
   navigateFallback: '/index.html',
-  importScripts: ['/sw.js'],
+  importScripts: [
+    '/sw.js',
+    '/idb-keyval.js'
+    ],
   runtimeCaching: [{
     urlPattern: /timeline/,
     handler: 'networkFirst'

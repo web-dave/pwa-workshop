@@ -106,20 +106,34 @@ function pushUnsubscribe() {
   });
 }
 
-function registerSync() {
+function registerSync () {
   if ('SyncManager' in window) {
     var messageForm = document.querySelector('.js-sync-form');
+    var messageField = messageForm.querySelector('.js-sync-input');
+
     messageForm.addEventListener('submit', function (event) {
       console.log('[SW Registration]: Form submit detected');
-      navigator.serviceWorker.ready.then(function (swRegistration) {
-        swRegistration.sync.register('post-tweet')
-          .then(function () { console.log('[SW Registration]: Background sync registered'); })
-          .catch(function (error) {
-            // system was unable to register for a sync,
-            // this could be an OS-level restriction
-            console.log('[SW Registration]: Error registering Background sync', error);
+
+      var message = {
+        message: messageField.value
+      };
+
+      idbKeyval.set('tweet-message', message)
+        .then(function () {
+          console.log('[SW Registration]: Wrote data to IndexedDB', message);
+
+          navigator.serviceWorker.ready.then(function (swRegistration) {
+            swRegistration.sync.register('post-tweet')
+              .then(function () {
+                console.log('[SW Registration]: Background sync registered');
+              })
+              .catch(function (error) {
+                // system was unable to register for a sync,
+                // this could be an OS-level restriction
+                console.log('[SW Registration]: Error registering Background sync', error);
+              });
           });
-      });
+        });
     });
     console.log('[SW Registration]: Background sync initiated');
 
