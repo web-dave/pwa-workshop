@@ -24,9 +24,9 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('push', function (event) {
-  log('[Service Worker]: Received push event')
+  log('[Service Worker]: Received push event');
 
-  var notificationData = {}
+  var notificationData = {};
 
   if (event.data) {
     notificationData = event.data.json().notification; // "notification node is specific for @angular/service-worker
@@ -35,27 +35,27 @@ self.addEventListener('push', function (event) {
       title: 'Something Has Happened',
       message: 'Something you might want to check out',
       icon: '/assets/images/logo.png'
-    }
+    };
   }
 
   self.registration.showNotification(notificationData.title, notificationData);
-})
+});
 
 self.addEventListener('notificationclick', function (event) {
-  log('[Service Worker]: Received notificationclick event', event)
+  log('[Service Worker]: Received notificationclick event', event);
 
-  event.notification.close()
+  event.notification.close();
 
   if (event.action == 'opentweet') {
-    log('[Service Worker]: Performing action opentweet')
+    log('[Service Worker]: Performing action opentweet');
 
     event.waitUntil(
       clients.openWindow(event.notification.data).then(function (windowClient) {
         // do something with the windowClient.
       })
-    )
+    );
   } else {
-    log('[Service Worker]: Performing default click action')
+    log('[Service Worker]: Performing default click action');
 
     // This looks to see if the current is already open and
     // focuses if it is
@@ -69,14 +69,19 @@ self.addEventListener('notificationclick', function (event) {
           for (var i = 0; i < clientList.length; i++) {
             var client = clientList[i]
             if (client.url == '/' && 'focus' in client)
-              return client.focus()
+              return client.focus();
           }
           if (clients.openWindow)
-            return clients.openWindow('/')
-        }))
+            return clients.openWindow('/');
+        }));
   }
-})
+});
 
 self.addEventListener('notificationclose', function (event) {
-  log('[Service Worker]: Received notificationclose event')
-})
+  log('[Service Worker]: Received notificationclose event');
+});
+
+self.addEventListener('sync', function (event) {
+  log('[Service Worker]: Received sync event', event.tag);
+});
+

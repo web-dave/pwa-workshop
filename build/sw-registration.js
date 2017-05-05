@@ -31,9 +31,12 @@ window.addEventListener('load', function () {
   document.querySelector('.js-push-unsubscribe-button').addEventListener('click', function () {
     pushUnsubscribe();
   });
+  document.querySelector('.js-sync-button').addEventListener('click', function () {
+    registerSync();
+  });
 });
 
-function urlBase64ToUint8Array (base64String) {
+function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4)
   const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
   const rawData = window.atob(base64);
@@ -45,7 +48,7 @@ function urlBase64ToUint8Array (base64String) {
 }
 
 
-function pushSubscribe () {
+function pushSubscribe() {
   if ('showNotification' in ServiceWorkerRegistration.prototype) {
     navigator.serviceWorker.ready.then(function (swRegistration) {
       // it seemes to never reach here.
@@ -59,8 +62,8 @@ function pushSubscribe () {
           console.log('[SW Registration]: Sending subscription object to backend to subscribe', pushSubscription)
           return fetch('http://localhost:3000/webpush', {
             method: 'POST',
-            body: JSON.stringify({action: 'subscribe', subscription: pushSubscription}),
-            headers: new Headers({'Content-Type': 'application/json'})
+            body: JSON.stringify({ action: 'subscribe', subscription: pushSubscription }),
+            headers: new Headers({ 'Content-Type': 'application/json' })
           })
         })
         .catch(function (error) {
@@ -76,30 +79,53 @@ function pushSubscribe () {
   }
 }
 
-function pushUnsubscribe () {
+function pushUnsubscribe() {
   navigator.serviceWorker.ready.then(function (swRegistration) {
     swRegistration.pushManager.getSubscription().then(
       function (pushSubscription) {
         if (!pushSubscription) {
-          console.log('[SW Registration]: No push subscription found')
-          return
+          console.log('[SW Registration]: No push subscription found');
+          return;
         }
 
-        console.log('[SW Registration]: Sending subscription object to backend to unsubscribe', pushSubscription)
+        console.log('[SW Registration]: Sending subscription object to backend to unsubscribe', pushSubscription);
         return fetch('http://localhost:3000/webpush', {
           method: 'POST',
-          body: JSON.stringify({action: 'unsubscribe', subscription: pushSubscription}),
-          headers: new Headers({'Content-Type': 'application/json'})
-        })
+          body: JSON.stringify({ action: 'unsubscribe', subscription: pushSubscription }),
+          headers: new Headers({ 'Content-Type': 'application/json' })
+        });
 
         pushSubscription.unsubscribe().then(function () {
-          console.log('[SW Registration]: Push unsubscription is successful')
+          console.log('[SW Registration]: Push unsubscription is successful');
         }).catch(function (error) {
-          console.log('[SW Registration]: Unable to unsubscribe from push.', error)
-        })
+          console.log('[SW Registration]: Unable to unsubscribe from push.', error);
+        });
       }).catch(function (error) {
-      console.log('[SW Registration]: Unable to get push subscription', error)
-    })
-  })
+        console.log('[SW Registration]: Unable to get push subscription', error);
+      });
+  });
 }
+
+function registerSync() {
+  if ('SyncManager' in window) {
+    var messageForm = document.querySelector('.js-sync-form');
+    messageForm.addEventListener('submit', function (event) {
+      console.log('[SW Registration]: Form submit detected');
+      navigator.serviceWorker.ready.then(function (swRegistration) {
+        swRegistration.sync.register('post-tweet')
+          .then(function () { console.log('[SW Registration]: Background sync registered'); })
+          .catch(function (error) {
+            // system was unable to register for a sync,
+            // this could be an OS-level restriction
+            console.log('[SW Registration]: Error registering Background sync', error);
+          });
+      });
+    });
+    console.log('[SW Registration]: Background sync initiated');
+
+  } else {
+    console.log("[SW Registration]: Background sync isn't supported in this browser");
+  }
+}
+
 
