@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+import { restroot } from './../../environments/environment.prod';
+
 @Component({
   selector: 'app-my-feeds',
   templateUrl: './my-feeds.component.html',
@@ -11,8 +13,8 @@ import 'rxjs/add/operator/map';
 })
 export class MyFeedsComponent implements OnInit {
 
-  private timelineUrl = 'http://localhost:3000/timeline/';
-  private favoritesUrl = 'http://localhost:3000/favorites/';
+  private timelineUrl = restroot + 'timeline/';
+  private favoritesUrl = restroot + 'favorites/';
   tweets;
   errorMessage;
 

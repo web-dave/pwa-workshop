@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+import { restroot } from './../../environments/environment.prod';
+
 @Component({
   selector: 'app-post-tweet',
   templateUrl: './post-tweet.component.html',
@@ -11,7 +13,7 @@ import 'rxjs/add/operator/map';
 })
 export class PostTweetComponent implements OnInit {
 
-  private postUrl = 'http://localhost:3000/post-tweet/';
+  private postUrl = restroot + 'post-tweet/';
   tweet;
   errorMessage;
 

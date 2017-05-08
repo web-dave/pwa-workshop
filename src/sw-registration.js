@@ -1,4 +1,9 @@
+var restroot = 'http://localhost:3000/';
+
 if ('serviceWorker' in navigator) {
+  if((location.host.indexOf('localhost')===-1)&&(location.host.indexOf('127.0.0.1')===-1)){
+    restroot = 'https://hidden-shelf-50024.herokuapp.com/';
+  }
   navigator.serviceWorker.register('/service-worker.js', {
     scope: '/'
   })
@@ -42,7 +47,7 @@ function urlBase64ToUint8Array (base64String) {
   }
   return outputArray
 }
-const vapidPublicKey = 'BHe82datFpiOOT0k3D4pieGt1GU-xx8brPjBj0b22gvmwl-HLD1vBOP1AxlDKtwYUQiS9S-SDVGYe_TdZrYJLw8'
+const vapidPublicKey = 'BK0KyEStZnnd9vabEpVZYmYcDSMJ-GFDCQH0bMEyOiuScLgQihpkEbVkLjr-CGxLMRRRTXZ72J2ZQq8SpgjZ03Q'
 const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey)
 
 
@@ -56,7 +61,7 @@ function pushSubscribe () {
         .then(function (pushSubscription) {
           console.log('[SW Registration]: Push subscription is successful')
           console.log('[SW Registration]: Sending subscription object to backend to subscribe', pushSubscription)
-          return fetch('http://localhost:3000/webpush', {
+          return fetch(restroot +'webpush', {
             method: 'POST',
             body: JSON.stringify({action: 'subscribe', subscription: pushSubscription}),
             headers: new Headers({'Content-Type': 'application/json'})
@@ -85,7 +90,7 @@ function pushUnsubscribe () {
         }
 
         console.log('[SW Registration]: Sending subscription object to backend to unsubscribe', pushSubscription)
-        return fetch('http://localhost:3000/webpush', {
+        return fetch(restroot +'webpush', {
           method: 'POST',
           body: JSON.stringify({action: 'unsubscribe', subscription: pushSubscription}),
           headers: new Headers({'Content-Type': 'application/json'})

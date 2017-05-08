@@ -1,4 +1,9 @@
+var restroot = 'http://localhost:3000/';
+
 if ('serviceWorker' in navigator) {
+  if((location.host.indexOf('localhost')===-1)&&(location.host.indexOf('127.0.0.1')===-1)){
+    restroot = 'https://hidden-shelf-50024.herokuapp.com/';
+  }
   navigator.serviceWorker.register('/service-worker.js', {
     scope: '/'
   })
@@ -56,7 +61,7 @@ function pushSubscribe () {
         .then(function (pushSubscription) {
           console.log('[SW Registration]: Push subscription is successful')
           console.log('[SW Registration]: Sending subscription object to backend to subscribe', pushSubscription)
-          return fetch('http://localhost:3000/webpush', {
+          return fetch(restroot +'webpush', {
             method: 'POST',
             body: JSON.stringify({action: 'subscribe', subscription: pushSubscription}),
             headers: new Headers({'Content-Type': 'application/json'})
@@ -85,7 +90,7 @@ function pushUnsubscribe () {
         }
 
         console.log('[SW Registration]: Sending subscription object to backend to unsubscribe', pushSubscription)
-        return fetch('http://localhost:3000/webpush', {
+        return fetch(restroot +'webpush', {
           method: 'POST',
           body: JSON.stringify({action: 'unsubscribe', subscription: pushSubscription}),
           headers: new Headers({'Content-Type': 'application/json'})

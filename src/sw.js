@@ -1,5 +1,9 @@
 var log = console.log.bind(console)
 var err = console.error.bind(console)
+var restroot = 'http://localhost:3000/';
+if((location.host.indexOf('localhost')===-1)&&(location.host.indexOf('127.0.0.1')===-1)){
+    restroot = 'https://hidden-shelf-50024.herokuapp.com/';
+  }
 
 self.addEventListener('install', (event) => {
   log('[Service Worker]: Installed')
@@ -92,7 +96,7 @@ self.addEventListener('sync', function (event) {
         .then(function (message) {
           log('[Service Worker]: Read data from IndexedDB', message)
 
-          return fetch('http://localhost:3000/post-tweet/', {
+          return fetch(restroot + 'post-tweet/', {
             method: 'POST',
             body: JSON.stringify(message),
             headers: {
