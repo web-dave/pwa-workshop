@@ -42,7 +42,7 @@ function urlBase64ToUint8Array (base64String) {
   }
   return outputArray
 }
-const vapidPublicKey = 'BHe82datFpiOOT0k3D4pieGt1GU-xx8brPjBj0b22gvmwl-HLD1vBOP1AxlDKtwYUQiS9S-SDVGYe_TdZrYJLw8'
+const vapidPublicKey = 'BK0KyEStZnnd9vabEpVZYmYcDSMJ-GFDCQH0bMEyOiuScLgQihpkEbVkLjr-CGxLMRRRTXZ72J2ZQq8SpgjZ03Q'
 const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey)
 
 
