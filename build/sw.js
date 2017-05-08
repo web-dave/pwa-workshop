@@ -96,7 +96,7 @@ self.addEventListener('sync', function (event) {
         .then(function (message) {
           log('[Service Worker]: Read data from IndexedDB', message)
 
-          return fetch('http://localhost:3000/post-tweet/', {
+          return fetch(restroot + 'post-tweet/', {
             method: 'POST',
             body: JSON.stringify(message),
             headers: {
